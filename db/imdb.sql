@@ -1,0 +1,23 @@
+DROP TABLE casting;
+DROP TABLE movies;
+DROP TABLE stars;
+
+CREATE TABLE stars (
+id SERIAL8  PRIMARY KEY,
+first_name VARCHAR(255),
+last_name VARCHAR(255)
+);
+
+CREATE TABLE movies (
+id SERIAL8 PRIMARY KEY,
+title VARCHAR(255),
+genre VARCHAR(255),
+budget INT8
+);
+
+CREATE TABLE casting (
+id SERIAL8 PRIMARY KEY,
+movies_id INT8 REFERENCES movies(id) ON DELETE CASCADE,
+stars_id INT8 REFERENCES stars(id) ON DELETE CASCADE,
+fee INT8
+);
