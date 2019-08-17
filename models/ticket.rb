@@ -1,5 +1,5 @@
 require_relative('../db/sql_runner')
-
+# v1
 class Ticket
 
   attr_reader :id, :film_id, :customer_id
