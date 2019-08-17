@@ -4,7 +4,7 @@ Create customers, films and tickets
 
 CRUD actions (create, read, update, delete) customers, films and tickets.
 
-Show which films a customer has booked to see, and see which customers are coming to see one film - **filmid.customers**
+Show which films a customer has booked to see, and see which customers are coming to see one film - **filmid.customers, customerid.films**
 
 ## Basic extensions:
 
