@@ -1,15 +1,17 @@
 require_relative('../db/sql_runner')
+require_relative('./film')
+require_relative('./ticket')
 
 class Customer
 
-
   attr_reader :id
-  attr_accessor :name, :funds #Update
+  attr_accessor :name, :funds, :tickets #Update
 
   def   initialize(options)
     @id = options['id'].to_i if options['id']
     @name = options['name']
     @funds = options['funds'].to_i
+    @tickets = tickets.to_i
   end
 
   def save()
@@ -43,8 +45,9 @@ class Customer
     result = customers.map { |customer_hash| Customer.new( customer_hash ) }
     return result
   end
-  #
-  def booked_films
+
+  # def booked_films
+  def films
     sql = "SELECT films.* FROM films
     INNER JOIN tickets ON tickets.film_id = films.id
     WHERE customer_id = $1"
@@ -52,6 +55,30 @@ class Customer
     films = SqlRunner.run(sql, values)
     result = films.map { |film| Film.new(film)  }
     return result
+  end
+
+  # def remaining_funds
+  def funds
+    sql = "SELECT films.* FROM films
+    INNER JOIN tickets ON tickets.film_id = films.id
+    WHERE tickets.customer_id = $1"
+    values = [@id]
+    film_data = SqlRunner.run(sql, values)
+    films = film_data.map {|film| Film.new(film)}
+    remaining_funds = @funds
+    films.each { |film| remaining_funds -= film.price  }
+    return @funds = remaining_funds
+  end
+
+  # def bought_tickets
+  def tickets
+    sql = "SELECT films.* FROM films
+    INNER JOIN tickets ON tickets.film_id = films.id
+    WHERE tickets.customer_id = $1"
+    values = [@id]
+    film_data = SqlRunner.run(sql, values)
+    films = film_data.map {|film| Film.new(film)}
+    p tickets = films.count
   end
 
 end

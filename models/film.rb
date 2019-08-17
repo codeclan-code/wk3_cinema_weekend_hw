@@ -29,7 +29,7 @@ class Film
     values = [@title, @price, @id]
     SqlRunner.run( sql, values )
   end
-  #
+  
   def delete()
     sql = "DELETE FROM films WHERE id = $1"
     values = [@id]
@@ -43,28 +43,15 @@ class Film
     return result
   end
 
-  def booked_customers
+  # def booked_customers
+  def customers
     sql = "SELECT customers.* FROM customers
     INNER JOIN tickets ON tickets.customer_id = customers.id
     WHERE film_id = $1"
     values = [@id]
     customers = SqlRunner.run(sql, values)
-    result = customers.map { |customer| Customer.new(customer)  }
-    return result
+    result = customers.map { |customer| Customer.new(customer)}
+    return result.count
   end
   #
-  #
-  # def remaining_budget
-  #   sql = "SELECT casting.* FROM casting
-  #   INNER JOIN movies ON casting.movies_id = movies.id
-  #   WHERE movies_id = $1 "
-  #   values = [@id]
-  #   casting_data = SqlRunner.run(sql, values)
-  #   castings = casting_data.map { |casting| Casting.new(casting)  }
-  #
-  #   remaining_budget = @budget
-  #   castings.each { |casting| remaining_budget -= casting.fee  }
-  #   return remaining_budget
-  # end
-
 end

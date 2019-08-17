@@ -10,7 +10,7 @@ Customer.delete_all()
 
 film1 = Film.new({
   "title" => "Terminator",
-  "price" => 5
+  "price" => 20
   })
 
   film1.save()
@@ -23,43 +23,56 @@ film1 = Film.new({
 
     film2.save()
 
-    customer1 = Customer.new({
-      "name" => "Wendy",
-      "funds" => 4
+    film3 = Film.new({
+      "title" => "Alien",
+      "price" => 20
       })
 
-      customer1.save()
+      film3.save()
 
-      customer2 = Customer.new({
-        "name" => "Lazarus",
-        "funds" => 3
+      customer1 = Customer.new({
+        "name" => "Wendy",
+        "funds" => 100
         })
 
-        customer2.save()
-        #
-        # CHECK ORDER IN TICKET INItIALIZE
-        ticket1 = Ticket.new({
-          "film_id" => film1.id,
-          "customer_id" => customer1.id
+        customer1.save()
+
+        customer2 = Customer.new({
+          "name" => "Lazarus",
+          "funds" => 100
           })
 
-          ticket1.save()
-
-          ticket2 = Ticket.new({
-            "film_id" => film2.id,
-            "customer_id" => customer2.id
+          customer2.save()
+          #
+          # CHECK ORDER IN TICKET INITIALIZE
+          ticket1 = Ticket.new({
+            "film_id" => film1.id,
+            "customer_id" => customer1.id
             })
 
-            ticket2.save()
+            ticket1.save()
 
-            ticket3 = Ticket.new({
+            ticket2 = Ticket.new({
               "film_id" => film1.id,
               "customer_id" => customer2.id
               })
 
-              ticket3.save()
-              #            #
+              ticket2.save()
 
+              ticket3 = Ticket.new({
+                "film_id" => film2.id,
+                "customer_id" => customer2.id
+                })
 
-              binding.pry
-              nil
+                ticket3.save()
+
+                ticket4 = Ticket.new({
+                  "film_id" => film3.id,
+                  "customer_id" => customer2.id
+                  })
+
+                  ticket4.save()
+                  #            #
+
+                  binding.pry
+                  nil
