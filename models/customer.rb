@@ -4,7 +4,7 @@ require_relative('./ticket')
 
 class Customer
 
-  attr_reader :id
+  attr_reader :id, :sql
   attr_accessor :name, :funds, :tickets #Update
 
   def   initialize(options)
@@ -12,6 +12,9 @@ class Customer
     @name = options['name']
     @funds = options['funds'].to_i
     @tickets = tickets.to_i
+    @sql = "SELECT films.* FROM films
+    INNER JOIN tickets ON tickets.film_id = films.id
+    WHERE customer_id = $1"
   end
 
   def save()
@@ -48,29 +51,25 @@ class Customer
 
   # def booked_films
   def films
-    sql = "SELECT films.* FROM films
-    INNER JOIN tickets ON tickets.film_id = films.id
-    WHERE customer_id = $1"
+    @sql #What about this?
     values = [@id]
     films = SqlRunner.run(sql, values)
-    result = films.map { |film| Film.new(film)  }
-    return result
+    result = films.map{ |film| Film.new(film)}
+    result.each { |film| p "#{film.title}"}
   end
 
   # def remaining_funds
   def funds
-    sql = "SELECT films.* FROM films
-    INNER JOIN tickets ON tickets.film_id = films.id
-    WHERE tickets.customer_id = $1"
+    @sql  #What about this?
     values = [@id]
     film_data = SqlRunner.run(sql, values)
     films = film_data.map {|film| Film.new(film)}
-    remaining_funds = @funds
-    films.each { |film| remaining_funds -= film.price  }
+    remaining_funds = 100 #@funds
+    films.each { |film| remaining_funds -= film.price}
     return @funds = remaining_funds
   end
 
-  # def bought_tickets
+  # def bought_tickets -d
   def tickets
     sql = "SELECT films.* FROM films
     INNER JOIN tickets ON tickets.film_id = films.id
@@ -78,7 +77,8 @@ class Customer
     values = [@id]
     film_data = SqlRunner.run(sql, values)
     films = film_data.map {|film| Film.new(film)}
-    p tickets = films.count
+    tickets = films.count
+    puts "Customer has #{tickets} ticket(s)"
   end
 
 end
