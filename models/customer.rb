@@ -13,9 +13,6 @@ class Customer
     @name = options['name']
     @funds = options['funds'].to_i
     @tickets = tickets.to_i
-    @sql = "SELECT films.* FROM films
-    INNER JOIN tickets ON tickets.film_id = films.id
-    WHERE customer_id = $1"
   end
 
   def save()
@@ -47,12 +44,20 @@ class Customer
     sql = "SELECT * FROM customers"
     customers = SqlRunner.run( sql )
     result = customers.map { |customer_hash| Customer.new( customer_hash ) }
+    no = 0
+    result.count
+    while (no < result.count)
+      puts  "Customer name: #{result[no].name}"
+      no += 1
+    end
     return result
   end
 
   # def booked_films
   def films
-    @sql #What about this?
+    sql = "SELECT films.* FROM films
+    INNER JOIN tickets ON tickets.film_id = films.id
+    WHERE customer_id = $1"
     values = [@id]
     films = SqlRunner.run(sql, values)
     result = films.map{ |film| Film.new(film)}
@@ -61,7 +66,9 @@ class Customer
 
   # def remaining_funds
   def funds
-    @sql  #What about this?
+    sql = "SELECT films.* FROM films
+    INNER JOIN tickets ON tickets.film_id = films.id
+    WHERE customer_id = $1"
     values = [@id]
     film_data = SqlRunner.run(sql, values)
     films = film_data.map {|film| Film.new(film)}
@@ -79,7 +86,7 @@ class Customer
     film_data = SqlRunner.run(sql, values)
     films = film_data.map {|film| Film.new(film)}
     tickets = films.count
-    puts "Customer has #{tickets} ticket(s)"
+    # puts "Customer has #{tickets} ticket(s)"
   end
 
 end
